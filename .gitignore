@@ -1,4 +1,4 @@
 .vscode
 .venv
 renderer/vertices/*.pkl
-
+*/__pycache__
