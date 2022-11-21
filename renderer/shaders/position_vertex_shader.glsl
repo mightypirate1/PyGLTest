@@ -11,12 +11,19 @@ out float size;
 out vec2 v_centroid;
 out vec2 v_pos;
 out float walltime;
+out float v_dist_to_centroid;
+
+vec2 proj(vec2 x) {
+    return (proj_mtx * vec4(x, 0.0, 1.0)).xy;
+}
+vec4 proj(vec4 x) {
+    return proj_mtx * x;
+}
 
 void main() {
-
-    gl_Position = vec4(in_vert, 1.0, 1.0);
-    size = in_size;
-    v_centroid = in_centroid;
-    v_pos = in_vert;
+    gl_Position = proj(vec4(in_vert,0,1));
+    v_centroid = proj(in_centroid);
+    v_pos = proj(in_vert);
+    size = in_size; // / proj_mtx[0][0];
     walltime = in_walltime;
 }

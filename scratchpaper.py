@@ -31,7 +31,7 @@ def make_line(p0, p1, width=0.05, start_color=(0.0, 1.0, 0.0, 1.0), end_color=(0
 def make_point(p, margin=0.1):
     corners = []
     for i in range(3):
-        corner_coords = p + 2 * margin * circle_coords(i, 3)
+        corner_coords = p + 3 * margin * circle_coords(i, 3)
         corner = [*corner_coords, margin, *p]
         corners.extend(corner)
     return corners
@@ -39,7 +39,6 @@ def make_point(p, margin=0.1):
 def random_positions(n):
     positions = []
     for _ in range(n):
-        # positions.extend(make_point(np.array([0, 0]), margin=1))
         positions.extend(make_point(np.random.randn(2)))
     return positions
 
@@ -59,7 +58,7 @@ def distance_color(points):
 
 def circle_coords(i, n):
     x = _idx_to_angle(i, n)
-    return np.array([np.cos(3*x), np.sin(2*x)])
+    return np.array([np.cos(x), np.sin(x)])
 
 def random_route(n, width=0.01):
     points = 1 - 2 * np.random.rand(n + 1, 2)
@@ -91,9 +90,9 @@ def create_circle(n):
 
 
 if __name__ == '__main__':
-    trace_vertices = create_circle(700)
-    # trace_vertices = random_route(1700, width=0.005)
-    position_vertices = random_positions(17)
+    # trace_vertices = create_circle(700)
+    trace_vertices = random_route(170, width=0.005)
+    position_vertices = random_positions(117)
 
     vertices = [trace_vertices, position_vertices]
     with open(Path(__file__).parent / "renderer/vertices/vertices.pkl", "wb") as f:

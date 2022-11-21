@@ -42,14 +42,12 @@ class RouteRenderer(WindowConf):
     def get_projection_matrix(self):
         T = time() - self.init_time
         scale = self.matrices["scale"].copy()
-        scale[0, 0] = (0.7 + 0.3 * np.sin(T))
-        scale[1, 1] = (0.7 + 0.3 * np.sin(1+T))
-        translation = self.matrices["translation"].copy()
-        return scale
-        return np.matmul(
+        translation = self.matrices["translation"]
+        proj_mtx = np.matmul(
             scale,
             translation,
         )
+        return proj_mtx
 
     def generate_static_content(self):
         T = time() - self.init_time
@@ -125,8 +123,18 @@ class RouteRenderer(WindowConf):
         )
 
         self._last_update_time = VERTEX_PATH.stat().st_mtime
-        
-        
+
+    def mouse_drag_event(self, x, y, dx, dy):
+        rel_change = np.array([dx, -dy]) / np.array(self.window_size)
+        new_translation = self.matrices["translation"][3,:2] + rel_change
+        self.matrices["translation"][3,:2] = np.clip(new_translation, -2, 2)
+
+    def mouse_scroll_event(self, x_offset: float, y_offset: float):
+        zoom_factor = 1.05 ** y_offset
+        self.matrices["scale"][0,0] *= zoom_factor
+        self.matrices["scale"][1,1] *= zoom_factor
+        self.matrices["translation"][3, :2] *= zoom_factor
+    
     def render(self, time: float, frame_time: float):
         self.refresh()
         self.ctx.clear(0.0, 0.0, 0.0)
