@@ -90,8 +90,8 @@ def create_circle(n):
 
 
 if __name__ == '__main__':
-    # trace_vertices = create_circle(700)
-    trace_vertices = random_route(170, width=0.005)
+    trace_vertices = create_circle(700)
+    # trace_vertices = random_route(170, width=0.005)
     position_vertices = random_positions(117)
 
     vertices = [trace_vertices, position_vertices]
